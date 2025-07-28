@@ -1,0 +1,14 @@
+{
+	"required": true,
+	"package": "com.sync_recipes.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"ServerRecipeBookMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

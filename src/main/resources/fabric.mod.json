@@ -1,0 +1,34 @@
+{
+	"schemaVersion": 1,
+	"id": "sync_recipes",
+	"version": "${version}",
+	"name": "SyncRecipes",
+	"description": "Synchronize unlocked recipes between all players on the server!",
+	"authors": [
+		"Vismay Vakharia"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/VismayVakharia/sync_recipes"
+	},
+	"license": "MIT",
+	"icon": "assets/sync_recipes/icon.png",
+	"environment": "server",
+	"entrypoints": {
+		"main": [
+			"com.sync_recipes.SyncRecipesMod"
+		]
+	},
+	"mixins": [
+		"sync_recipes.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.14",
+		"minecraft": "~1.21.7",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
