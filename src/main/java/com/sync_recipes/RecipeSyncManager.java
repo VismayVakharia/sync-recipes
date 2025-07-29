@@ -10,7 +10,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.sync_recipes.SyncRecipesMod.LOGGER;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RecipeSyncManager {
     public static MinecraftServer server;
@@ -18,28 +19,24 @@ public class RecipeSyncManager {
 
     public static Set<RecipeEntry<?>> globallyUnlockedRecipes = new HashSet<>();
 
-    public static final void registerRecipeToGlobalSet(RecipeEntry<?> recipeEntry) {
-        // not being used!
-        globallyUnlockedRecipes.add(recipeEntry);
+    private static final Logger LOGGER = LoggerFactory.getLogger("SyncRecipes -> Manager");
+
+    public static void syncGlobalSetToPlayer(ServerPlayerEntity player) {
+        LOGGER.info("{} recipes synced from global set to {}!", globallyUnlockedRecipes.size(), player.getGameProfile().getName());
+        player.getRecipeBook().unlockRecipes(globallyUnlockedRecipes, player);
     }
 
-    public static final void syncGlobalSetToPlayer(ServerPlayerEntity player) {
-        player.unlockRecipes(globallyUnlockedRecipes);
+    public static void registerAllRecipesToGlobalSet(Collection<RecipeEntry<?>> recipeEntries) {
+        LOGGER.info("{} recipes synced to the global set!", recipeEntries.size());
+        globallyUnlockedRecipes.addAll(recipeEntries);
     }
 
-    public static final boolean registerAllRecipesToGlobalSet(Collection<RecipeEntry<?>> recipeEntries) {
-        return globallyUnlockedRecipes.addAll(recipeEntries);
-    }
-
-    public static final void registerPlayerRecipesToGlobalSet(ServerPlayerEntity player) {
-        // LOGGER.info(String.format("Syncing player %s recipes to the global set!",
-        // player.getGameProfile().getName()));
+    public static void registerPlayerRecipesToGlobalSet(ServerPlayerEntity player) {
         ServerRecipeBook recipeBook = player.getRecipeBook();
         Set<RecipeEntry<?>> knownRecipes = allRecipes.stream().filter(recipe -> recipeBook.isUnlocked(recipe.id()))
                 .collect(Collectors.toSet());
 
         registerAllRecipesToGlobalSet(knownRecipes);
-        LOGGER.info(String.format("%d recipes synced from player %s to the global set!", knownRecipes.size(),
-                player.getGameProfile().getName()));
+        LOGGER.info("{} recipes synced from {} to the global set!", knownRecipes.size(), player.getGameProfile().getName());
     }
 }
